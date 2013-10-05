@@ -104,9 +104,6 @@ class SexpInfo
   end
 
   class Arg < SexpThing
-    def initialize(sexp)
-      @sexp = sexp
-    end
 
     def name
       sexp[1]
@@ -116,7 +113,6 @@ class SexpInfo
       sexp.count == 2
     end
 
-    attr_reader :sexp
   end
 
 
