@@ -1,0 +1,3 @@
+def no_args
+  "no args"
+end
