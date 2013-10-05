@@ -2,7 +2,12 @@ def no_args
   "no args"
 end
 
-def one_arg(foo)
+
+def one_arg_no_parens foo
+  foo
+end
+
+def one_arg_parens(foo)
   foo
 end
 
