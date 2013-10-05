@@ -1,14 +1,20 @@
 require "sexp_info/version"
 require 'pry_debug'
+require 'active_support/all'
 class SexpInfo
 
   def initialize(sexp)
     @sexp = sexp
   end
 
-  def defined_methods
-    _methods
+  def type
+    sexp[1][0][0]
   end
+
+  def defined_methods
+    instance.defined_methods
+  end
+
 
   def [](name)
     defined_methods.find{|m| m == name }
@@ -17,16 +23,57 @@ class SexpInfo
   private
 
   attr_reader :sexp
+  def instance
+    "SexpInfo::#{type.to_s.camelize}Sexp".constantize.new(sexp)
+  end
 
   def _methods
     sexp[1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
   end
 
-
-  class Method
+  class SexpThing
     def initialize(sexp)
       @sexp = sexp
     end
+
+    def ==(other)
+      other.is_a?(String) ? name == other : self.sexp == other.sexp
+    end
+
+    attr_reader :sexp
+
+  end
+
+  class DefSexp < SexpThing
+
+    # This is what we get if we just slam some methods into a file
+    def defined_methods
+      _methods
+    end
+
+    private
+    def _methods
+      sexp[1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
+    end
+
+  end
+
+  class ClassSexp < SexpThing
+
+    # This works with files that start with `class Foo` etc.
+
+    def defined_methods
+      _methods
+    end
+
+    def _methods
+      sexp[1][0][3][1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
+    end
+
+
+  end
+
+  class Method < SexpThing
 
     def name
       sexp[1][1]
@@ -36,23 +83,13 @@ class SexpInfo
       args.count
     end
 
-    def ==(other)
-      other.is_a?(String) ? name == other : self.sexp == other.sexp
-    end
-
-    attr_reader :sexp
-
     def args
       Args.new(sexp[2])
     end
 
   end
 
-  class Args
-
-    def initialize(sexp)
-      @sexp = sexp
-    end
+  class Args < SexpThing
 
     def [](index)
       args[index]
@@ -62,7 +99,7 @@ class SexpInfo
       args.count
     end
 
-    attr_reader :sexp
+    private
 
     def args
       arg_list + optional_args_list
@@ -80,7 +117,7 @@ class SexpInfo
 
   end
 
-  class Arg
+  class Arg < SexpThing
     def initialize(sexp)
       @sexp = sexp
     end
