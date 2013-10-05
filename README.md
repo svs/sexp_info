@@ -1,6 +1,27 @@
 # SexpInfo
 
-TODO: Write a gem description
+This gem provides nice information about your program based on Ripper sexps. Given a ruby source file called foo.rb
+
+```ruby
+class Foo
+  def bar(baz, quux = 123)
+    "yikes"
+  end
+end
+```
+
+we can do the folliwng
+
+```ruby
+  rip = Ripper.sexp(File.read('foo.rb'))
+  si = SexpInfo.new(rip)
+  si.defined_methods # => ["bar"]
+  si["bar"].arity # => 2
+  si["bar"].args[1].optional? # => true
+```
+
+Please check the specs for more information
+
 
 ## Installation
 
@@ -16,9 +37,6 @@ Or install it yourself as:
 
     $ gem install sexp_info
 
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 
