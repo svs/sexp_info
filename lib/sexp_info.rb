@@ -27,10 +27,6 @@ class SexpInfo
     "SexpInfo::#{type.to_s.camelize}Sexp".constantize.new(sexp)
   end
 
-  def _methods
-    sexp[1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
-  end
-
   class SexpThing
     def initialize(sexp)
       @sexp = sexp
