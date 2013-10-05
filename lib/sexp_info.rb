@@ -47,12 +47,8 @@ class SexpInfo
   class DefSexp < SexpThing
 
     # This is what we get if we just slam some methods into a file
-    def defined_methods
-      _methods
-    end
 
-    private
-    def _methods
+    def defined_methods
       sexp[1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
     end
 
@@ -63,14 +59,8 @@ class SexpInfo
     # This works with files that start with `class Foo` etc.
 
     def defined_methods
-      _methods
+      DefSexp.new(sexp[1][0][3]).defined_methods
     end
-
-    def _methods
-      sexp[1][0][3][1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
-    end
-
-
   end
 
   class Method < SexpThing
