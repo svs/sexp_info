@@ -6,7 +6,7 @@ describe SexpInfo do
     Given(:methods) { File.read('spec/fixtures/methods.rb') }
     Given(:rip) { Ripper.sexp(methods) }
     Given(:sexp) { SexpInfo.new(rip) }
-    Then { ap sexp.send(:sexp); sexp.type.should == :def }
+    Then { sexp.type.should == :def }
     Then { sexp.defined_methods.should == ["no_args", "one_arg_no_parens", "one_arg_parens" ,"two_args", "optional_args"] }
     Then { sexp["no_args"].arity.should == 0 }
     Then { sexp["one_arg_no_parens"].arity.should == 1 }
