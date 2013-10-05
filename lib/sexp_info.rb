@@ -12,20 +12,31 @@ class SexpInfo
   end
 
   def defined_methods
-    instance.defined_methods
+    defined(:def)
   end
 
+  def defined_classes
+    defined(:class)
+  end
+
+  def defined_modules
+    defined(:module)
+  end
 
   def [](name)
-    defined_methods.find{|m| m == name }
+    (defined_classes + defined_methods + defined_modules).find{|m| m == name }
   end
 
   private
 
   attr_reader :sexp
-  def instance
-    "SexpInfo::#{type.to_s.camelize}Sexp".constantize.new(sexp)
+  def defined(type)
+    sexp[1] ? sexp[1].find_all{|s| s[0] == type}.map{|c| "SexpThing::#{type.to_s.camelize}".constantize.new(c) } : []
   end
+
+end
+
+module SexpThing
 
   class SexpThing
     def initialize(sexp)
@@ -36,30 +47,12 @@ class SexpInfo
       other.is_a?(String) ? name == other : self.sexp == other.sexp
     end
 
+
     attr_reader :sexp
 
   end
 
-  class DefSexp < SexpThing
-
-    # This is what we get if we just slam some methods into a file
-
-    def defined_methods
-      sexp[1].select{|x| x[0] == :def}.map{|x| Method.new(x) }
-    end
-
-  end
-
-  class ClassSexp < SexpThing
-
-    # This works with files that start with `class Foo` etc.
-
-    def defined_methods
-      DefSexp.new(sexp[1][0][3]).defined_methods
-    end
-  end
-
-  class Method < SexpThing
+  class Def < SexpThing
 
     def name
       sexp[1][1]
@@ -74,6 +67,28 @@ class SexpInfo
     end
 
   end
+
+  class Class < SexpThing
+
+    def name
+      sexp[1][1][1]
+    end
+
+    def defined_methods
+      SexpInfo.new(sexp[3]).defined_methods
+    end
+  end
+
+  class Module < SexpThing
+    def name
+      sexp[1][1][1]
+    end
+    def defined_classes
+      SexpInfo.new(sexp[2]).defined_classes
+    end
+  end
+
+
 
   class Args < SexpThing
 
@@ -114,7 +129,4 @@ class SexpInfo
     end
 
   end
-
-
-
 end

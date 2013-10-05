@@ -6,3 +6,10 @@ class StdClass
   end
 
 end
+
+class OtherClass
+
+  def foo
+  end
+
+end
