@@ -1,3 +1,4 @@
+require 'pry_debug'
 module SexpThing
   class Def < Base
 
@@ -11,6 +12,10 @@ module SexpThing
 
     def args
       Args.new(sexp[2])
+    end
+
+    def line_number
+      sexp[1][2][0]
     end
 
   end

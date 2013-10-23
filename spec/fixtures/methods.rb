@@ -5,6 +5,7 @@ end
 
 def one_arg_no_parens foo
   foo
+  return 1
 end
 
 def one_arg_parens(foo)

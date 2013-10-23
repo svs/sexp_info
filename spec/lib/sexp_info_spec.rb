@@ -14,6 +14,7 @@ describe SexpInfo do
     Then { sexp["two_args"].arity.should == 2 }
     Then { sexp["two_args"].args[0].should_not be_optional }
     Then { sexp["optional_args"].args[1].should be_optional }
+    Then { sexp["optional_args"].line_number.should == 19 }
   end
 
 
