@@ -1,4 +1,3 @@
-require 'active_support/all'
 require 'sexp_info/sexp_thing/sexp_thing'
 class SexpInfo
 

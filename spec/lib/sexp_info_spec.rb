@@ -26,7 +26,7 @@ describe SexpInfo do
     Then { sexp["StdClass"].defined_methods.should == ["optional_args"] }
   end
 
-  context "classes" do
+  context "modules" do
     Given(:modules) { File.read('spec/fixtures/modules.rb') }
     Given(:rip) { Ripper.sexp(modules) }
     Given(:sexp) { SexpInfo.new(rip) }
@@ -34,6 +34,7 @@ describe SexpInfo do
     Then { sexp.defined_modules.should == ["StdModule"] }
     Then { sexp["StdModule"].should be_a SexpThing::Module }
     Then { sexp["StdModule"].defined_classes.should == ["StdClass"] }
+    Then {
   end
 
 
