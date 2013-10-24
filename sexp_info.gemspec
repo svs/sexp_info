@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'sexp_info'
+require 'sexp_info/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "sexp_info"
-  spec.version       = SexpInfo::VERSION
+  spec.version       = SEXP_VERSION
   spec.authors       = ["svs"]
   spec.email         = ["svs@svs.io"]
   spec.description   = %q{Peek under the hood of sexps}

@@ -2,8 +2,6 @@ require 'active_support/all'
 require 'sexp_info/sexp_thing/sexp_thing'
 class SexpInfo
 
-  VERSION = "0.0.4"
-
   def initialize(sexp)
     @sexp = sexp
   end
