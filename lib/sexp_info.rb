@@ -1,3 +1,4 @@
+require 'active_support/all'
 require 'sexp_info/sexp_thing/sexp_thing'
 class SexpInfo
 
@@ -19,12 +20,21 @@ class SexpInfo
     defined(:class)
   end
 
+  def to_h
+    Hash[children.map{|c| [c.name, c.to_h] }]
+  end
+
   def defined_modules
     defined(:module)
   end
 
+
+  def children
+    defined_classes + defined_methods + defined_modules
+  end
+
   def [](name)
-    (defined_classes + defined_methods + defined_modules).find{|m| m == name }
+    (children).find{|m| m == name }
   end
 
   private

@@ -34,7 +34,17 @@ describe SexpInfo do
     Then { sexp.defined_modules.should == ["StdModule"] }
     Then { sexp["StdModule"].should be_a SexpThing::Module }
     Then { sexp["StdModule"].defined_classes.should == ["StdClass"] }
-    Then {
+    Then { sexp.to_h.should == {
+        "StdModule" => {
+          :sexp => "StdModule",
+          "StdClass" => {
+            :sexp => "StdClass",
+            "optional_args" => "optional_args"
+          }
+        }
+      }
+    }
+
   end
 
 

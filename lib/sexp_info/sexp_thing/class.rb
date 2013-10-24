@@ -7,7 +7,7 @@ module SexpThing
     end
 
     def to_h
-      defined_methods.map{|m| [m.name, m]}.merge(:sexp => self)
+      Hash[defined_methods.map{|m| [m.name, m]}].merge(:sexp => self)
     end
 
     def defined_methods
